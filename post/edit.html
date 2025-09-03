@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Blog Post - KidGear Outdoors</title>
+  <meta name="description"
+    content="Edit your blog post on KidGear Outdoors — update content, media, and title easily." />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#fdf3eb] min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-[#455F7D] text-white p-4 flex justify-between items-center shadow-md">
+    <nav class="space-x-4">
+      <a href="index.html" class="font-semibold hover:underline">Home</a>
+    </nav>
+    <div>
+      <a href="login.html" class="mr-2 hover:underline">Log In</a>
+      <span class="mx-1">|</span>
+      <a href="register.html" class="ml-2 hover:underline">Sign Up</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex items-center justify-center py-10 px-4">
+    <section class="bg-white rounded-lg shadow-lg w-full max-w-md p-8 space-y-4">
+      <h1 class="text-2xl font-bold mb-4 text-center text-[#455F7D]">Edit Your Blog Post</h1>
+
+      <form id="editPostForm" class="space-y-4" aria-label="Edit blog post form">
+        <div>
+          <label for="title" class="block text-gray-700 font-medium mb-1">Title*</label>
+          <input type="text" id="title" name="title" required placeholder="Post title"
+            class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
+        </div>
+
+        <div>
+          <label for="body" class="block text-gray-700 font-medium mb-1">Content</label>
+          <textarea id="body" name="body" rows="4" placeholder="Post body"
+            class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label for="imageUrl" class="block text-gray-700 font-medium mb-1">Image URL</label>
+          <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg"
+            class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
+        </div>
+
+        <div>
+          <label for="imageAlt" class="block text-gray-700 font-medium mb-1">Image description</label>
+          <input type="text" id="imageAlt" name="imageAlt" placeholder="Describe your image"
+            class="w-full border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
+        </div>
+
+        <div class="flex flex-col space-y-2">
+          <button type="submit"
+            class="w-full bg-[#455F7D] hover:bg-[#374c62] text-white font-semibold py-2 rounded transition-colors duration-200">
+            Update Post
+          </button>
+          <button type="button" id="deletePostBtn"
+            class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded transition-colors duration-200">
+            Delete Post
+          </button>
+        </div>
+
+        <p id="errorMessage" class="text-red-600 text-sm mt-2" role="alert"></p>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#fdf3eb] text-center p-6 mt-auto">
+    <div class="flex justify-center items-center space-x-4 mb-2">
+      <a href="#" aria-label="Instagram">
+        <img src="../img/instagram.webp" alt="Instagram" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Facebook">
+        <img src="../img/facebook.webp" alt="Facebook" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Twitter">
+        <img src="../img/twitter.webp" alt="Twitter" width="24" height="24" class="inline-block">
+      </a>
+    </div>
+    <p class="text-gray-600 text-sm">© 2025 KidGear Outdoors. All rights reserved.</p>
+  </footer>
+
+  <script src="../api/edit.js" defer></script>
+  <script src="../api/delete.js" defer></script>
+</body>
+
+</html>

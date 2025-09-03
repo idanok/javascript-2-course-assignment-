@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Post | KidGear Outdoors</title>
+  <meta name="description" content="Discover our kids-friendly outdoor clothing" />
+  <link rel="canonical" href="https://yourdomain.com/post/view.html?id=123" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#fdf3eb] min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-[#455F7D] text-white p-4 flex justify-between items-center shadow-md">
+    <nav class="space-x-4">
+      <a href="index.html" class="font-semibold hover:underline">Home</a>
+    </nav>
+    <div class="flex space-x-2">
+      <a href="/account/login.html" id="loginLink" class="hover:underline font-semibold">Log In</a>
+      <span class="divider">|</span>
+      <a href="/account/register.html" id="signUpLink" class="hover:underline font-semibold">Sign Up</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex justify-center py-10 px-4">
+    <section id="postContainer"
+      class="bg-white w-full max-w-3xl rounded-lg shadow-lg p-8 space-y-6 min-h-[400px]">
+      <p class="text-gray-500 text-center">Loading post...</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#fdf3eb] p-6 mt-auto text-center">
+    <div class="flex justify-center items-center space-x-4 mb-2">
+      <a href="#" aria-label="Instagram">
+        <img src="../img/instagram.webp" alt="Instagram" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Facebook">
+        <img src="../img/facebook.webp" alt="Facebook" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Twitter">
+        <img src="../img/twitter.webp" alt="Twitter" width="24" height="24" class="inline-block">
+      </a>
+    </div>
+    <p class="text-gray-600 text-sm">© 2025 KidGear Outdoors. All rights reserved.</p>
+  </footer>
+
+  <script src="../api/view.js" defer></script>
+</body>
+
+</html>

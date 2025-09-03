@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Blog Posts</title>
+  <meta name="description" content="Discover the latest kid-friendly outdoor clothing from KidGear Outdoors.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#fdf3eb] min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-[#455F7D] text-white shadow-md p-4 flex justify-between items-center">
+    <nav class="space-x-4">
+      <a href="index.html" class="font-semibold hover:underline">Home</a>
+    </nav>
+    <div id="headerRight" class="flex items-center space-x-2">
+      <a href="login.html" id="loginLink" class="hover:underline">Log In</a>
+      <span id="divider">|</span>
+      <a href="register.html" id="signUpLink" class="hover:underline">Sign Up</a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-[#455F7D]">My Blog Posts</h1>
+
+    <!-- Create Post Button -->
+    <div class="mb-6">
+      <button id="createPostBtn"
+        class="bg-[#455F7D] hover:bg-[#374c62] text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200">
+        + Create Post
+      </button>
+    </div>
+
+    <!-- Search Input -->
+    <div class="mb-6">
+      <input type="text" id="searchInput" placeholder="Search blog posts..."
+        class="w-full md:w-1/2 border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
+    </div>
+
+    <!-- Post Grid -->
+    <section id="postGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Posts will be injected here by JS -->
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#fdf3eb] text-center p-6 mt-auto">
+    <div class="flex justify-center items-center space-x-4 mb-2">
+      <a href="#" aria-label="Instagram">
+        <img src="../img/instagram.webp" alt="Instagram" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Facebook">
+        <img src="../img/facebook.webp" alt="Facebook" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Twitter">
+        <img src="../img/twitter.webp" alt="Twitter" width="24" height="24" class="inline-block">
+      </a>
+    </div>
+    <p class="text-gray-600 text-sm">© 2025 My Blog. All rights reserved.</p>
+  </footer>
+
+  <script src="../api/posts.js" defer></script>
+</body>
+
+</html>
