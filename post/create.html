@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Blog Post</title>
-  <meta name="description" content="Create a new blog post about outdoor clothing for kids on KidGear Outdoors." />
+  <title>Create Blog Post - Lively</title>
+  <meta name="description" content="Create a new blog post about your daily life." />
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -14,7 +15,7 @@
   <!-- Header -->
   <header class="bg-[#455F7D] text-white shadow-md p-4 flex justify-between items-center">
     <nav class="space-x-4">
-      <a href="index.html" class="font-semibold hover:underline">Home</a>
+      <a href="../social/posts.html" class="font-semibold hover:underline">Home</a>
     </nav>
     <div id="headerRight" class="flex items-center space-x-2">
       <a href="login.html" id="loginLink" class="hover:underline">Log In</a>
@@ -24,44 +25,50 @@
   </header>
 
   <!-- Main Content -->
-  <main class="flex-grow container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6 text-[#455F7D]">Create a New Blog Post</h1>
-
-    <form id="createPostForm" class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto space-y-4"
-      aria-label="Create blog post form">
-      
-      <div class="flex flex-col">
-        <label for="title" class="mb-1 font-medium text-gray-700">Title*</label>
-        <input type="text" id="title" name="title" required placeholder="Post title"
-          class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]" />
-      </div>
-
-      <div class="flex flex-col">
-        <label for="body" class="mb-1 font-medium text-gray-700">Content</label>
-        <textarea id="body" name="body" rows="5" placeholder="Post body"
-          class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]"></textarea>
-      </div>
-
-      <div class="flex flex-col">
-        <label for="imageUrl" class="mb-1 font-medium text-gray-700">Image URL</label>
-        <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg"
-          class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]" />
-      </div>
-
-      <div class="flex flex-col">
-        <label for="imageAlt" class="mb-1 font-medium text-gray-700">Image description</label>
-        <input type="text" id="imageAlt" name="imageAlt" placeholder="Describe your image"
-          class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]" />
-      </div>
-
-      <button type="submit"
-        class="bg-[#455F7D] hover:bg-[#374c62] text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200">
-        Publish
-      </button>
-
-      <p id="errorMessage" role="alert" class="text-red-600"></p>
-    </form>
+  <main class="flex-grow flex flex-col items-center p-6">
+    <!-- Container for heading + form -->
+    <div class="w-full max-w-2xl">
+      <h1 class="text-3xl font-bold mb-6 text-[#455F7D] text-center">Create a New Blog Post</h1>
+  
+      <form id="createPostForm" 
+            class="bg-white p-6 rounded-lg shadow-md space-y-4 min-h-[400px] md:min-h-[500px] lg:min-h-[600px]"
+            aria-label="Create blog post form">
+        
+        <div class="flex flex-col">
+          <label for="title" class="mb-1 font-medium text-gray-700">Title*</label>
+          <input type="text" id="title" name="title" required placeholder="Post title"
+            class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]" />
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="body" class="mb-1 font-medium text-gray-700">Content</label>
+          <textarea id="body" name="body" rows="5" placeholder="Post body"
+            class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]"></textarea>
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="imageUrl" class="mb-1 font-medium text-gray-700">Image URL</label>
+          <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg"
+            class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]" />
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="imageAlt" class="mb-1 font-medium text-gray-700">Image description</label>
+          <input type="text" id="imageAlt" name="imageAlt" placeholder="Describe your image"
+            class="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-[#455F7D]" />
+        </div>
+  
+        <button type="submit"
+          class="bg-[#455F7D] hover:bg-[#374c62] text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200">
+          Publish
+        </button>
+  
+        <p id="errorMessage" role="alert" class="text-red-600"></p>
+      </form>
+    </div>
   </main>
+  
+
 
   <!-- Footer -->
   <footer class="bg-[#fdf3eb] text-center p-6 mt-auto">
@@ -76,7 +83,7 @@
         <img src="../img/twitter.webp" alt="Twitter" width="24" height="24" class="inline-block">
       </a>
     </div>
-    <p class="text-gray-600 text-sm">© 2025 KidGear Outdoors. All rights reserved.</p>
+    <p class="text-gray-600 text-sm">© 2025 Lifely. All rights reserved.</p>
   </footer>
 
   <script src="../api/create.js" defer></script>

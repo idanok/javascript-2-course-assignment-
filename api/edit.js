@@ -1,46 +1,27 @@
-// Get necessary data from localStorage and URL
+// api/edit.js
+import { sanitize, setupLogoutLink, setupAccessibility } from './editHelpers.js';
+
+// Access check
 const token = localStorage.getItem("accessToken");
 const userName = localStorage.getItem("userName");
 const postId = new URLSearchParams(window.location.search).get("id");
 
-// Block access if user is not logged in or post ID is missing
 if (!token || !userName || !postId) {
     alert("You must be logged in and have a valid post ID to edit.");
     location.href = "../account/login.html";
 }
 
-// Setup event listeners after the DOM has loaded
-document.addEventListener("DOMContentLoaded", () => {
-    setupLogoutLink();
-    setupAccessibility();
-    loadPost();
-    setupFormSubmit();
-    setupDeleteButton(); // assumed to be defined elsewhere
-});
-
-// Set accessible labels and titles
-function setAria(id, label, title) {
-    const el = document.getElementById(id);
-    if (el) {
-        el.setAttribute("aria-label", label);
-        el.setAttribute("title", title);
-    }
-}
-
-function setupAccessibility() {
-    setAria("title", "Post title", "Edit the title");
-    setAria("body", "Post content", "Edit the content");
-    setAria("imageUrl", "Image URL", "Update image URL");
-    setAria("imageAlt", "Image description", "Update image description");
-}
-
-// Load existing post data into the form
+/**
+ * Load existing post data into the edit form
+ * @async
+ * @returns {Promise<void>}
+ */
 async function loadPost() {
     try {
         const res = await fetch(`https://v2.api.noroff.dev/blog/posts/${userName}/${postId}`);
         const { data } = await res.json();
 
-        if (!res.ok) throw new Error("Failed to fetch post.");
+        if (!res.ok || !data) throw new Error("Failed to fetch post.");
 
         document.getElementById("title").value = data.title || "";
         document.getElementById("body").value = data.body || "";
@@ -51,10 +32,12 @@ async function loadPost() {
     }
 }
 
-// Handle form submission and update the post
+// Handle edit form submission
 function setupFormSubmit() {
     const form = document.getElementById("editPostForm");
-    form?.addEventListener("submit", async (e) => {
+    if (!form) return;
+
+    form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const errorMsg = document.getElementById("errorMessage");
         errorMsg.textContent = "";
@@ -91,23 +74,33 @@ function setupFormSubmit() {
     });
 }
 
-// Replace login/signup with a logout link
-function setupLogoutLink() {
-    const headerRight = document.getElementById("headerRight");
-    document.getElementById("loginLink")?.remove();
-    document.getElementById("signUpLink")?.remove();
-    document.getElementById("divider")?.remove();
+// Handle delete post
+function setupDeleteButton() {
+    const deleteBtn = document.getElementById("deletePostBtn");
+    if (!deleteBtn) return;
 
-    const logout = document.createElement("a");
-    logout.href = "#";
-    logout.textContent = "Log Out";
-    logout.setAttribute("aria-label", "Log out and return to login page");
-    logout.setAttribute("title", "Log out");
-    logout.addEventListener("click", () => {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("userName");
-        location.href = "../account/login.html";
+    deleteBtn.addEventListener("click", async () => {
+        if (!confirm("Are you sure you want to delete this post?")) return;
+
+        try {
+            const res = await fetch(`https://v2.api.noroff.dev/blog/posts/${userName}/${postId}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!res.ok) throw new Error("Failed to delete post.");
+            alert("Post deleted!");
+            location.href = "../social/posts.html";
+        } catch (err) {
+            document.getElementById("errorMessage").textContent = err.message;
+        }
     });
-
-    headerRight?.appendChild(logout);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    setupLogoutLink();      
+    setupAccessibility();  
+    loadPost();        
+    setupFormSubmit();   
+    setupDeleteButton();   
+});

@@ -5,49 +5,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Blog Posts</title>
-  <meta name="description" content="Discover the latest kid-friendly outdoor clothing from KidGear Outdoors.">
+  <meta name="description"
+    content="Catch up on the latest posts from your friends and the Lifely community. Share, like, and stay connected every day.">
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-[#fdf3eb] min-h-screen flex flex-col">
 
-  <!-- Header -->
   <header class="bg-[#455F7D] text-white shadow-md p-4 flex justify-between items-center">
     <nav class="space-x-4">
-      <a href="index.html" class="font-semibold hover:underline">Home</a>
+      <a href="../social/posts.html" class="font-semibold hover:underline">Home</a>
     </nav>
-    <div id="headerRight" class="flex items-center space-x-2">
+    <a href="profile.html"
+      class="ml-3 flex items-center gap-2 bg-white text-[#455F7D] font-semibold py-1.5 px-4 rounded-full shadow-md hover:bg-[#f0f0f0] hover:shadow-lg transition-all duration-200">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M5.121 17.804A10.97 10.97 0 0112 15c2.21 0 4.25.708 5.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      My Profile
+    </a>
+    <div class="flex items-center space-x-2" id="headerRight">
       <a href="login.html" id="loginLink" class="hover:underline">Log In</a>
       <span id="divider">|</span>
       <a href="register.html" id="signUpLink" class="hover:underline">Sign Up</a>
     </div>
+
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-grow container mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6 text-[#455F7D]">My Blog Posts</h1>
 
-    <!-- Create Post Button -->
-    <div class="mb-6">
-      <button id="createPostBtn"
-        class="bg-[#455F7D] hover:bg-[#374c62] text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200">
-        + Create Post
-      </button>
+  <div class="mt-10 mb-10 px-4 md:px-20 w-full flex flex-col md:flex-row md:justify-center md:items-center gap-4">
+
+    <input type="text" id="searchInput" placeholder="Search blog posts..."
+      class="w-full md:w-1/2 border border-gray-300 rounded p-3 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
+
+    <button id="createPostBtn"
+      class="bg-[#455F7D] hover:bg-[#374c62] text-white font-semibold py-3 px-6 rounded shadow transition-colors duration-200 w-full md:w-auto">
+      + Create Post
+    </button>
+
+    <button id="viewUsersBtn"
+      class="bg-[#F28C8C] hover:bg-[#e06b6b] text-white font-semibold py-3 px-6 rounded shadow transition-colors duration-200 w-full md:w-auto">
+      View Users
+    </button>
+  </div>
+
+
+  <h1 class="text-3xl font-bold mb-6 text-[#455F7D] text-center">My Blog Posts</h1>
+
+  <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full" id="postGrid" aria-label="Blog posts">
+
+  </section>
+
+  <template id="postCardTemplate">
+    <div class="post-thumb bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+      <img src="https://via.placeholder.com/300x200" alt="Post image" class="w-full h-80 md:h-96 lg:h-80 object-cover"
+        loading="lazy">
+      <div class="p-4 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold text-[#455F7D] mb-2">Post Title</h3>
+        <p class="text-gray-700 flex-grow">Post snippet...</p>
+        <div class="mt-4 flex gap-2">
+          <a href="#"
+            class="flex-1 text-center bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded shadow transition duration-200">View</a>
+          <a href="#"
+            class="flex-1 text-center bg-[#455F7D] hover:bg-[#374c62] text-white font-medium py-2 px-4 rounded shadow transition duration-200">Edit</a>
+        </div>
+      </div>
     </div>
-
-    <!-- Search Input -->
-    <div class="mb-6">
-      <input type="text" id="searchInput" placeholder="Search blog posts..."
-        class="w-full md:w-1/2 border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
-    </div>
-
-    <!-- Post Grid -->
-    <section id="postGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Posts will be injected here by JS -->
-    </section>
+  </template>
   </main>
 
-  <!-- Footer -->
   <footer class="bg-[#fdf3eb] text-center p-6 mt-auto">
     <div class="flex justify-center items-center space-x-4 mb-2">
       <a href="#" aria-label="Instagram">
@@ -60,10 +88,11 @@
         <img src="../img/twitter.webp" alt="Twitter" width="24" height="24" class="inline-block">
       </a>
     </div>
-    <p class="text-gray-600 text-sm">© 2025 My Blog. All rights reserved.</p>
+    <p class="text-gray-600 text-sm">&copy; 2025 Lifely. All rights reserved.</p>
   </footer>
 
-  <script src="../api/posts.js" defer></script>
+  <script type="module" src="../api/posts.js" defer></script>
+
 </body>
 
 </html>

@@ -1,23 +1,64 @@
-// Check for login
+// posts.js
+import { buildUserPostCard, renderEmptyState } from './postHelpers.js';
+
+// Get login info from localStorage
 const token = localStorage.getItem("accessToken");
 const userName = localStorage.getItem("userName");
 
 if (!token || !userName) {
     alert("You must be logged in to access this page.");
-    window.location.href = "/account/login.html";
+    window.location.href = "../account/login.html";
     throw new Error("Access denied. User not authenticated.");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// Ensure the user has a social profile
+async function ensureProfileExists() {
+  try {
+    const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${userName}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (res.ok) {
+      // Profile already exists
+      return;
+    }
+
+    // If profile not found, create one
+    await fetch(`https://v2.api.noroff.dev/social/profiles/${userName}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        avatar: {
+          url: "https://via.placeholder.com/150",
+          alt: `${userName}'s avatar`
+        }
+      })
+    });
+
+    console.log("✅ Created social profile for", userName);
+  } catch (err) {
+    console.error("Failed to ensure profile:", err);
+  }
+}
+
+// Initialize DOM actions
+document.addEventListener("DOMContentLoaded", async () => {
     initHeaderLinks();
     initCreateButton();
+    initViewUsersButton();
+    initSearch();
+
+    await ensureProfileExists(); // 🔥 NEW: make sure profile exists
+
     fetchPublicPosts();
     fetchPrivatePosts();
-    initSearch();
 });
 
-// Replace login/signup with logout in header
-function initHeaderLinks() {
+// Header 
+const initHeaderLinks = () => {
     const headerRight = document.getElementById("headerRight");
     ["loginLink", "signUpLink", "divider"].forEach(id => {
         const el = document.getElementById(id);
@@ -33,26 +74,95 @@ function initHeaderLinks() {
     logoutLink.addEventListener("click", () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userName");
-        window.location.href = "/account/login.html";
+        window.location.href = "../account/login.html";
     });
 
     if (headerRight) headerRight.appendChild(logoutLink);
-}
+};
 
-// New Post button setup
-function initCreateButton() {
+// create post button
+const initCreateButton = () => {
     const createBtn = document.getElementById("createPostBtn");
-    if (createBtn) {
-        createBtn.setAttribute("aria-label", "Create a new blog post");
-        createBtn.setAttribute("title", "New Post");
-        createBtn.addEventListener("click", () => {
-            window.location.href = "../post/create.html";
-        });
-    }
-}
+    if (!createBtn) return;
 
-// Render multiple posts (public view)
-function renderPosts(posts) {
+    createBtn.setAttribute("aria-label", "Create a new blog post");
+    createBtn.setAttribute("title", "New Post");
+    createBtn.addEventListener("click", () => window.location.href = "../post/create.html");
+};
+
+// view users button
+const initViewUsersButton = () => {
+    const viewUsersBtn = document.getElementById('viewUsersBtn');
+    if (!viewUsersBtn) return;
+
+    viewUsersBtn.addEventListener("click", () => window.location.href = "../social/users.html");
+};
+
+// search bar
+const initSearch = () => {
+  const searchInput = document.getElementById("searchInput");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", e => {
+      const query = e.target.value.toLowerCase();
+      const filtered = (window.allPosts || []).filter(post =>
+          post.title.toLowerCase().includes(query) ||
+          post.body?.toLowerCase().includes(query)
+      );
+
+      const postGrid = document.getElementById("postGrid");
+      postGrid.innerHTML = "";
+
+      if (!filtered.length) {
+          postGrid.innerHTML = "<p>No posts found.</p>";
+          return;
+      }
+
+      filtered.forEach(post => postGrid.appendChild(buildUserPostCard(post)));
+  });
+};
+
+// fetch posts
+const fetchPublicPosts = async () => {
+    try {
+        const res = await fetch("https://v2.api.noroff.dev/blog/posts/idanok");
+        const { data: posts } = await res.json();
+
+        if (posts?.length) {
+            window.allPosts = posts;
+            renderPosts(posts);
+        } else {
+            renderEmptyState("No public posts found.");
+        }
+    } catch (err) {
+        console.error("Failed to fetch public posts:", err);
+        renderEmptyState("Unable to load public posts.");
+    }
+};
+
+const fetchPrivatePosts = async () => {
+  const postGrid = document.getElementById("postGrid");
+  try {
+      const res = await fetch(`https://v2.api.noroff.dev/blog/posts/${userName}`, {
+          headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const { data: posts } = await res.json();
+
+      if (!posts?.length) return;
+
+      posts
+          .sort((a, b) => new Date(b.created) - new Date(a.created))
+          .slice(0, 12)
+          .forEach(post => postGrid.appendChild(buildUserPostCard(post)));
+  } catch (err) {
+      console.error("Failed to fetch private posts:", err);
+      postGrid.innerHTML = "<p>Error loading your posts.</p>";
+  }
+};
+
+// render posts 
+const renderPosts = posts => {
     const postGrid = document.getElementById("postGrid");
     postGrid.innerHTML = "";
 
@@ -61,119 +171,6 @@ function renderPosts(posts) {
         return;
     }
 
-    posts.forEach(post => {
-        const a = document.createElement("a");
-        a.href = `post/view.html?id=${post.id}`;
-        a.className = "post-thumb";
-        a.setAttribute("aria-label", `View post titled ${post.title}`);
-        a.setAttribute("title", `View post: ${post.title}`);
-        a.innerHTML = `
-            <img 
-                src="${post.media?.url || 'https://via.placeholder.com/300x200'}" 
-                alt="${post.media?.alt || post.title}" 
-                width="300" height="400" 
-                loading="lazy" />
-            <h3>${post.title}</h3>
-            <p>${post.body?.slice(0, 80)}...</p>
-        `;
-        postGrid.appendChild(a);
-    });
-}
+    posts.forEach(post => postGrid.appendChild(buildUserPostCard(post)));
+};
 
-// Message for empty post list
-function renderEmptyState(message) {
-    document.getElementById("postGrid").innerHTML = `<p>${message}</p>`;
-}
-
-// Set dynamic meta description for SEO
-function injectMeta(post) {
-    const meta = document.createElement("meta");
-    meta.name = "description";
-    meta.content = `Latest post: ${post.title} — ${post.body?.slice(0, 120).replace(/[\n\r]+/g, " ")}...`;
-    document.head.appendChild(meta);
-}
-
-// Public posts for search and display
-async function fetchPublicPosts() {
-    try {
-        const response = await fetch("https://v2.api.noroff.dev/blog/posts/idaNokk");
-        const { data: posts } = await response.json();
-
-        if (posts?.length) {
-            injectMeta(posts[0]);
-            window.allPosts = posts;
-            renderPosts(posts);
-        } else {
-            renderEmptyState("No public posts found.");
-        }
-    } catch (error) {
-        console.error("Failed to fetch public posts:", error);
-        renderEmptyState("Unable to load public posts.");
-    }
-}
-
-// Search handler
-function initSearch() {
-    const searchInput = document.getElementById("searchInput");
-    if (!searchInput) return;
-
-    searchInput.addEventListener("input", (e) => {
-        const query = e.target.value.toLowerCase();
-        const filtered = (window.allPosts || []).filter(post =>
-            post.title.toLowerCase().includes(query) ||
-            post.body?.toLowerCase().includes(query)
-        );
-        renderPosts(filtered);
-    });
-}
-
-// Private posts with edit/view options
-async function fetchPrivatePosts() {
-    const postGrid = document.getElementById("postGrid");
-
-    try {
-        const response = await fetch(`https://v2.api.noroff.dev/blog/posts/${userName}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const { data: posts } = await response.json();
-
-        if (!posts?.length) {
-            postGrid.innerHTML = "<p>No posts found.</p>";
-            return;
-        }
-
-        const latestPosts = posts
-            .sort((a, b) => new Date(b.created) - new Date(a.created))
-            .slice(0, 12);
-
-        postGrid.innerHTML = "";
-        latestPosts.forEach(post => {
-            postGrid.appendChild(buildUserPostCard(post));
-        });
-    } catch (error) {
-        console.error("Failed to fetch user posts:", error);
-        postGrid.innerHTML = "<p>Error loading your posts.</p>";
-    }
-}
-
-// Build a user post card with edit/view buttons
-function buildUserPostCard(post) {
-    const div = document.createElement("div");
-    div.className = "post-thumb";
-    div.innerHTML = `
-        <img 
-            src="${post.media?.url || 'https://via.placeholder.com/300x200'}" 
-            alt="${post.media?.alt || post.title}" 
-            width="300" height="200"
-            loading="lazy"
-            style="object-fit: cover; width: 100%; height: auto;" 
-        />
-        <h3>${post.title}</h3>
-        <p>${post.body?.slice(0, 80)}...</p>
-        <div class="thumb-buttons">
-            <a href="../post/view.html?id=${post.id}" class="btn-view" title="View post: ${post.title}" aria-label="View post titled ${post.title}">View</a>
-            <a href="../post/edit.html?id=${post.id}" class="btn-edit" title="Edit post: ${post.title}" aria-label="Edit post titled ${post.title}">Edit</a>
-        </div>
-    `;
-    return div;
-}

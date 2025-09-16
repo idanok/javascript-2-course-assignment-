@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users - Lifely</title>
+  <meta name="description" content="Browse and follow other users on Lifely.">
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fdf3eb] min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-[#455F7D] text-white shadow-md p-4 flex justify-between items-center">
+    <nav class="space-x-4">
+      <a href="posts.html" class="font-semibold hover:underline">Home</a>
+    </nav>
+    <div class="flex items-center space-x-2" id="headerRight">
+      <a href="login.html" id="loginLink" class="hover:underline">Log In</a>
+      <span id="divider">|</span>
+      <a href="register.html" id="signUpLink" class="hover:underline">Sign Up</a>
+    </div>
+  </header>
+
+  <main class="flex-grow py-10 px-4 md:px-20">
+    <h1 class="text-2xl font-bold text-center text-[#455F7D] mb-6">All Users</h1>
+
+    <!-- Search -->
+    <div class="flex justify-center mb-8">
+      <input type="text" id="searchUsers" placeholder="Search users..."
+        class="w-full md:w-1/2 border border-gray-300 rounded p-2 focus:ring-2 focus:ring-[#455F7D] focus:outline-none" />
+    </div>
+
+    <!-- Users Grid -->
+    <section id="usersGrid" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <!-- Users will be injected here -->
+    </section>
+
+    <p id="errorMessage" class="text-center text-red-600 mt-4"></p>
+
+    <!-- Optional: Profile Section -->
+    <section id="profileView" class="mt-10 hidden">
+      <h2 class="text-xl font-bold text-[#455F7D] mb-4">User Profile</h2>
+      <div id="profileInfo"></div>
+      <h3 class="text-lg font-semibold text-[#455F7D] mt-6 mb-4">Posts</h3>
+      <div id="profilePosts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+  </main>
+
+  <template id="postCardTemplate">
+    <div class="post-thumb bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+      <img src="https://via.placeholder.com/300x200" alt="Post image" class="w-full h-80 object-cover" loading="lazy">
+      <div class="p-4 flex flex-col flex-grow">
+        <h3 class="text-xl font-semibold text-[#455F7D] mb-2">Post Title</h3>
+        <p class="text-gray-700 flex-grow">Post snippet...</p>
+        <div class="mt-4 flex gap-2">
+          <a href="#" class="flex-1 text-center bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded shadow">View</a>
+          <a href="#" class="flex-1 text-center bg-[#455F7D] hover:bg-[#374c62] text-white font-medium py-2 px-4 rounded shadow">Edit</a>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <footer class="bg-[#fdf3eb] text-center p-6 mt-auto">
+    <div class="flex justify-center items-center space-x-4 mb-2">
+      <a href="#" aria-label="Instagram">
+        <img src="../img/instagram.webp" alt="Instagram" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Facebook">
+        <img src="../img/facebook.webp" alt="Facebook" width="24" height="24" class="inline-block">
+      </a>
+      <a href="#" aria-label="Twitter">
+        <img src="../img/twitter.webp" alt="Twitter" width="24" height="24" class="inline-block">
+      </a>
+    </div>
+    <p class="text-gray-600 text-sm">&copy; 2025 Lifely. All rights reserved.</p>
+  </footer>
+
+  <script type="module" src="../api/users.js"></script>
+
+</body>
+</html>
