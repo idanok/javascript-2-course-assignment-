@@ -5,10 +5,10 @@ A front-end web application allow users to perform CRUD operations (Create, Read
 A front-end social media app where users can register, log in, create, edit, delete, and view posts, follow/unfollow users, search posts, and view profiles.
 
 ## Why these technologies were used:
-JavaScript (ES6 modules): For dynamic, interactive, and modular functionality.
-HTML/CSS (Bootstrap/Tailwind optional): For page structure and responsive styling.
-Noroff API: Handles authentication, posts, and user profiles.
-Netlify: For easy deployment
+- JavaScript (ES6 modules): For dynamic, interactive, and modular functionality.
+- HTML/CSS (Bootstrap/Tailwind optional): For page structure and responsive styling.
+- Noroff API: Handles authentication, posts, and user profiles.
+- Netlify: For easy deployment
 
 ## Challenges & future features:
 Challenges included managing authenticated requests and dynamic DOM updates. Future improvements: real-time notifications, enhanced UI/UX, and post reactions/comments.
@@ -25,21 +25,21 @@ Authentication: Some pages require login. Use credentials created during registr
 
 
 ## Features
-Register and login users
-View feed of all posts
-Create, edit, delete posts
-View individual posts and other users' posts
-Follow/unfollow users
-Search posts
-View own profile
+- Register and login users
+- View feed of all posts
+- Create, edit, delete posts
+- View individual posts and other users' posts
+- Follow/unfollow users
+- Search posts
+- View own profile
 
 
 ## Requirements & Notes
-Use ES6 modules
-At least 3 functions documented with JSDoc
-Basic UI required
-Deploy on GitHub Pages, Netlify, or Vercel
-Follow Noroff’s code of conduct
+- Use ES6 modules
+- At least 3 functions documented with JSDoc
+- Basic UI required
+- Deploy on GitHub Pages, Netlify, or Vercel
+- Follow Noroff’s code of conduct
 
 
 ## Resources:
