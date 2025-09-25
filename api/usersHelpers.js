@@ -8,7 +8,7 @@ export function protectPage() {
     const userName = localStorage.getItem("userName");
     if (!token || !userName) {
       alert("You must be logged in to view this page.");
-      window.location.href = "login.html";
+      window.location.href = "../account/login.html";
     }
   }
   
@@ -23,7 +23,7 @@ export function protectPage() {
     logout.addEventListener("click", () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userName");
-      window.location.href = "login.html";
+      window.location.href = "../account/login.html";
     });
     headerRight.appendChild(logout);
   }

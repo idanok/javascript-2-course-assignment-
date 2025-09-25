@@ -1,4 +1,3 @@
-// api/edit.js
 import { sanitize, setupLogoutLink, setupAccessibility } from './editHelpers.js';
 
 // Access check

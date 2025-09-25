@@ -1,91 +1,136 @@
-// Check for login
+// Retrieve credentials
 const token = localStorage.getItem("accessToken");
+const apiKey = localStorage.getItem("noroffApiKey");
 const userName = localStorage.getItem("userName");
 
+// Redirect if not logged in
 if (!token || !userName) {
     alert("You must be logged in to access this page.");
     window.location.href = "../account/login.html";
     throw new Error("Access denied. User not authenticated.");
 }
 
-/**
- * Initializes the header by removing login/signup links
- * and adding a logout link for authenticated users.
- * Clicking logout clears localStorage and redirects to login page.
- */
-const initHeaderLinks = () => {
+// Initialize header links
+function initHeaderLinks() {
     const headerRight = document.getElementById("headerRight");
-    ["loginLink", "signUpLink", "divider"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.remove();
-    });
+    if (!headerRight) return;
+    headerRight.innerHTML = "";
 
     const logoutLink = document.createElement("a");
     logoutLink.href = "#";
     logoutLink.textContent = "Log Out";
-    logoutLink.title = "Log out";
-    logoutLink.setAttribute("aria-label", "Log out and return to login page");
-
+    logoutLink.className = "hover:underline font-semibold";
     logoutLink.addEventListener("click", () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userName");
+        localStorage.removeItem("noroffApiKey");
         window.location.href = "../account/login.html";
     });
 
-    if (headerRight) headerRight.appendChild(logoutLink);
-};
+    headerRight.appendChild(logoutLink);
+}
 
-/**
- * Populates the profile page with user data.
- *
- * @param {Object} userProfile - Object containing user profile information.
- * @param {string} userProfile.name - Full name of the user.
- * @param {string} userProfile.username - Username/handle of the user.
- * @param {string} userProfile.email - Email address of the user.
- * @param {string} userProfile.location - Location of the user.
- * @param {string} userProfile.joined - Join date of the user.
- * @param {string} userProfile.bio - Biography or description of the user.
- * @param {string} userProfile.image - URL to the profile image.
- * @param {Object} userProfile.social - Social media links.
- * @param {string} userProfile.social.instagram - Instagram link.
- * @param {string} userProfile.social.facebook - Facebook link.
- * @param {string} userProfile.social.twitter - Twitter link.
- */
-const loadUserProfile = (userProfile) => {
-    document.getElementById("profileName").textContent = userProfile.name;
-    document.getElementById("profileUsername").textContent = `@${userProfile.username}`;
-    document.getElementById("profileBio").textContent = userProfile.bio;
-    document.getElementById("profileEmail").textContent = userProfile.email;
-    document.getElementById("profileLocation").textContent = userProfile.location;
-    document.getElementById("profileJoined").textContent = userProfile.joined;
+// Simple URL validation
+function isValidUrl(string) {
+    try {
+        return Boolean(new URL(string));
+    } catch {
+        return false;
+    }
+}
 
-    const profileImg = document.getElementById("profileImage");
-    profileImg.src = userProfile.image;
-    profileImg.alt = userProfile.name;
+// Fetch current profile
+async function fetchProfile() {
+    try {
+        const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${userName}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "X-Noroff-API-Key": apiKey
+            }
+        });
 
-    document.getElementById("profileInstagram").href = userProfile.social.instagram;
-    document.getElementById("profileFacebook").href = userProfile.social.facebook;
-    document.getElementById("profileTwitter").href = userProfile.social.twitter;
-};
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data?.errors?.[0]?.message || "Failed to fetch profile");
+        return data.data;
+    } catch (err) {
+        console.error("Fetch profile error:", err);
+        alert(`Error fetching profile: ${err.message}`);
+        throw err;
+    }
+}
+
+// Render profile
+function renderProfile(profile) {
+    document.getElementById("profileName").textContent = profile.name;
+    document.getElementById("profileUsername").textContent = `@${profile.name}`;
+    document.getElementById("profileBio").textContent = profile.bio || "";
+    document.getElementById("profileEmail").textContent = profile.email;
+    document.getElementById("profileJoined").textContent = new Date(profile.created).toLocaleDateString();
+    const imgEl = document.getElementById("profileImage");
+    imgEl.src = profile.avatar?.url || "https://via.placeholder.com/150";
+    imgEl.alt = profile.avatar?.alt || profile.name;
+
+    // Prefill edit form
+    document.getElementById("bio").value = profile.bio || "";
+    document.getElementById("avatarUrl").value = profile.avatar?.url || "";
+}
+
+// Update profile
+async function updateProfile(update) {
+    try {
+        const res = await fetch(`https://v2.api.noroff.dev/social/profiles/${userName}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "X-Noroff-API-Key": apiKey,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(update)
+        });
+
+        const data = await res.json();
+        console.log("Update response:", data);
+
+        if (!res.ok) throw new Error(data?.errors?.[0]?.message || "Failed to update profile");
+
+        alert("Profile updated successfully!");
+        renderProfile(data.data);
+    } catch (err) {
+        console.error("Update profile error:", err);
+        alert(`Error updating profile: ${err.message}`);
+    }
+}
 
 // DOMContentLoaded
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     initHeaderLinks();
 
-    const userProfile = {
-        name: "Ida Nøkland",
-        username: "idanok",
-        email: "idanoe0019511@stud.noroff.no",
-        location: "Lyngdal, Norway",
-        joined: "August 2025",
-        bio: "Hi, I'm a 24-year-old student and proud mom of one wonderful daughter. I love staying active, working out, and exploring new ways to keep life exciting. On Lively, I share my thoughts, experiences, and everyday life updates — from personal reflections to adventures and moments that matter.",
-        image: "../img/profile.jpeg",
-        social: {
-            instagram: "#",
-            facebook: "#",
-            twitter: "#"
-        }
-    };
+    // Load profile
+    try {
+        const profile = await fetchProfile();
+        renderProfile(profile);
+    } catch (err) {
+        console.error(err);
+    }
 
-    loadUserProfile(userProfile);
+    // Handle edit form
+    const form = document.getElementById("editProfileForm");
+    form?.addEventListener("submit", async e => {
+        e.preventDefault();
+
+        const bio = document.getElementById("bio")?.value.trim();
+        const avatarUrl = document.getElementById("avatarUrl")?.value.trim();
+
+        const update = {};
+        if (bio) update.bio = bio;
+        if (avatarUrl) {
+            if (!isValidUrl(avatarUrl)) return alert("Avatar URL must be a valid URL");
+            update.avatar = { url: avatarUrl, alt: `Avatar for ${userName}` };
+        }
+
+        if (!Object.keys(update).length) return alert("Please provide at least one field to update");
+
+        await updateProfile(update);
+    });
 });

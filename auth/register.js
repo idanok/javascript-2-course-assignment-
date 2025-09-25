@@ -1,4 +1,3 @@
-// Import functions from auth.js module
 import { registerUser, setAria, redirectTo } from './auth.js';
 
 // Get references to form and input fields
@@ -47,7 +46,7 @@ async function handleFormSubmit(e) {
   try {
     const data = await registerUser(userData);
 
-    // Immediately create the social profile
+    // Create the social profile
     await fetch(`https://v2.api.noroff.dev/social/profiles/${data.data.name}`, {
       method: "PUT",
       headers: {
@@ -71,9 +70,14 @@ async function handleFormSubmit(e) {
   }
 }
 
-
-// Attach the handler to form submission
+// Register user, save credentials, and redirect to posts page
 if (form) {
   form.addEventListener("submit", handleFormSubmit);
 }
 
+const data = await registerUser(userData);
+
+localStorage.setItem("accessToken", data.data.accessToken);
+localStorage.setItem("userName", data.data.name);
+
+redirectTo("posts.html");

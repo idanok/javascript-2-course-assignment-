@@ -1,4 +1,3 @@
-// api/view.js
 import { sanitize, injectMetaDescription, setupShareButton, initHeaderLinks } from './viewHelpers.js';
 
 // Access check
@@ -44,7 +43,6 @@ async function loadPost(postId, userName) {
         document.getElementById("postBody").textContent = "";
     }
 }
-
 
 // DOM ready
 document.addEventListener("DOMContentLoaded", () => {

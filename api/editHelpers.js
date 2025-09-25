@@ -1,5 +1,3 @@
-// api/editHelpers.js
-
 /**
  * Sanitize string to prevent XSS
  * @param {string} str

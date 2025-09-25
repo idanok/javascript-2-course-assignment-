@@ -13,12 +13,8 @@ export const injectMetaDescription = post => {
     document.head.appendChild(meta);
 };
 
-/**
- * Setup the share button to copy the post link to clipboard.
- * Updates status text on success or failure.
- *
- * @param {string} link - The URL to copy when the button is clicked.
- */
+// Setup the share button to copy the post link to clipboard
+// Updates status text on success or failure
 export const setupShareButton = link => {
     const btn = document.getElementById("shareButton");
     const status = document.getElementById("shareStatus");
@@ -35,7 +31,7 @@ export const setupShareButton = link => {
     });
 };
 
-// Initialize the logout link in the header, replacing login/signup
+// Initialize the logout link in the header, replacing login/signup links
 export const initHeaderLinks = () => {
     const headerRight = document.getElementById("headerRight");
     if (!headerRight) return;

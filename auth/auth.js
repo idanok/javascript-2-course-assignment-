@@ -1,4 +1,4 @@
-// auth.js
+// Login user
 export async function loginUser(email, password) {
     try {
         const response = await fetch("https://v2.api.noroff.dev/auth/login", {
@@ -13,17 +13,14 @@ export async function loginUser(email, password) {
             throw new Error(data.errors?.[0]?.message || "Login failed.");
         }
 
-        return data; // data.data.accessToken & data.data.name
+        return data;
     } catch (error) {
         console.error("Login error:", error);
         throw error;
     }
 }
 
-
-/**
- * Registers a new user using the Noroff API.
- */
+// Register user
 export async function registerUser(userData) {
     const response = await fetch("https://v2.api.noroff.dev/auth/register", {
         method: "POST",
@@ -38,4 +35,16 @@ export async function registerUser(userData) {
     }
 
     return data;
+}
+
+// Accessibility helper
+export function setAria(input, label, description) {
+    if (!input) return;
+    input.setAttribute("aria-label", label);
+    input.setAttribute("aria-description", description);
+}
+
+// Redirect helper
+export function redirectTo(url) {
+    window.location.href = url;
 }

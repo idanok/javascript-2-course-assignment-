@@ -37,11 +37,7 @@ export const buildUserPostCard = post => {
     return clone;
 };
 
-/**
- * Renders a message in the post grid when there are no posts to display.
- *
- * @param {string} message - The message to display in the post grid.
- */
+// Show a message in the post grid when there are no posts
 export const renderEmptyState = message => {
     const postGrid = document.getElementById("postGrid");
     postGrid.innerHTML = `<p>${message}</p>`;

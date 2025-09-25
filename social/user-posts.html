@@ -2,12 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover all users on Lifely</title>
-    <meta name="description"
-        content="Browse all Lifely users, follow friends, and view their posts on your social media app for daily stories.">
-    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Posts — Lifely</title>
+    <meta name="description" content="Browse and search posts by a specific Lifely user.">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -34,12 +33,15 @@
     </header>
 
     <main class="flex-grow p-6">
-        <input type="text" id="searchUsers" placeholder="Search users..."
-            class="w-full max-w-md mb-6 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#455F7D]">
+        <h1 id="userTitle" class="text-3xl font-bold text-[#455F7D] mb-6">User Posts</h1>
 
-        <div id="errorMessage" class="text-red-600 mb-4"></div>
+        <div class="mb-6 flex justify-center">
+            <input type="text" id="searchPostsInput" placeholder="Search posts..."
+                class="w-full max-w-md border border-gray-300 rounded p-3 focus:ring-2 focus:ring-[#455F7D] focus:outline-none"
+                aria-label="Search posts" />
+        </div>
 
-        <div id="usersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="postsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
     <footer class="bg-[#fdf3eb] text-center p-6 mt-auto">
@@ -57,7 +59,7 @@
         <p class="text-gray-600 text-sm">&copy; 2025 Lifely. All rights reserved.</p>
     </footer>
 
-    <script type="module" src="../api/users.js"></script>
+    <script type="module" src="../api/user-posts.js"></script>
 </body>
 
 </html>
